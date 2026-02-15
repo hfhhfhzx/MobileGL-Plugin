@@ -29,10 +29,11 @@ android {
         }
     }
 
+    buildFeatures {
+        resValues = true
+    }
+    
     buildTypes {
-        debug {
-            enableAndroidTestSupport = true
-        }
         release {
             signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
