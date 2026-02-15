@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
 }
 
 android {
@@ -13,6 +12,12 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+    }
+    
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+        }
     }
     
     signingConfigs {
@@ -77,13 +82,6 @@ android {
             //The maximum supported MC version
             manifestPlaceholders["maxMCVer"] = "" //为空则不限制 No restriction if empty
         }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
     }
 }
 
