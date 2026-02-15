@@ -67,6 +67,8 @@ android {
             //If there are multiple libraries, you can use "," to separate them, for example  DLOPEN=libxxx.so,libyyy.so
             manifestPlaceholders["boatEnv"] = mutableMapOf<String,String>().apply {
                 put("LIBGL", "3")
+                put("MGL_CONFIG_IN_PLUGIN", "true")
+                put("LIBGL_MULTIDRAW", "Indirect")
             }.run {
                 var env = ""
                 forEach { (key, value) ->
@@ -77,9 +79,11 @@ android {
 
             manifestPlaceholders["pojavEnv"] = mutableMapOf<String,String>().apply {
                 put("LIBGL", "3")
-                put("POJAV_RENDERER", "opengles3")
+                put("POJAV_RENDERER", "opengles3_mgl")
 				put("POJAVEXEC_EGL", "libMobileGL.so")
 				put("LIBGL_EGL", "libMobileGL.so")
+				put("MGL_CONFIG_IN_PLUGIN", "true")
+                put("LIBGL_MULTIDRAW", "Indirect")
             }.run {
                 var env = ""
                 forEach { (key, value) ->
