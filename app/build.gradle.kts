@@ -66,7 +66,7 @@ android {
             //如果有多个库,可以使用","隔开,例如  DLOPEN=libxxx.so,libyyy.so
             //If there are multiple libraries, you can use "," to separate them, for example  DLOPEN=libxxx.so,libyyy.so
             manifestPlaceholders["boatEnv"] = mutableMapOf<String,String>().apply {
-
+                put("LIBGL", "3")
             }.run {
                 var env = ""
                 forEach { (key, value) ->
@@ -76,7 +76,10 @@ android {
             }
 
             manifestPlaceholders["pojavEnv"] = mutableMapOf<String,String>().apply {
-
+                put("LIBGL", "3")
+                put("POJAV_RENDERER", "opengles3")
+				put("POJAVEXEC_EGL", "libMobileGL.so")
+				put("LIBGL_EGL", "libMobileGL.so")
             }.run {
                 var env = ""
                 forEach { (key, value) ->
