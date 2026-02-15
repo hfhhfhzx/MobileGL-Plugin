@@ -4,14 +4,14 @@ plugins {
 
 android {
     namespace = "com.mio.plugin.renderer"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.mio.plugin.renderer"
+        applicationId = "com.fcl.plugin"
         minSdk = 26
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        targetSdk = 36
+        versionCode = 951
+        versionName = "1.0.0"
     }
     
     kotlin {
@@ -47,7 +47,7 @@ android {
         configureEach {
             //应用名
             //app name
-            resValue("string","app_name","MobileGL Renderer")
+            resValue("string","app_name","MobileGL")
             //包名后缀
             //package name Suffix
             applicationIdSuffix = ".mobilegl"
