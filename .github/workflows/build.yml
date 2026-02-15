@@ -40,3 +40,24 @@ jobs:
         with:
           name: app-release
           path: app/build/outputs/apk/release/*.apk
+          
+      - name: Delete old latest release and tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          LATEST_TAG=$(git tag --list latest)
+          gh release delete "$LATEST_TAG" --yes || echo "No previous latest release found to delete."
+          git push origin --delete "$LATEST_TAG" || echo "No previous latest tag found to delete."
+          
+      - name: Create latest Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "MobileGL Latest Plugin File"
+          tag_name: "latest"
+          target_commitish: ${{ github.sha }}
+          body: |
+            - 这是最新构建的 MobileGL 插件，将在下一次 Github Actions 运行时被替换
+
+            - This is the newly built MobileGL plugin which will be replaced during the next Github Actions run
+          files: |
+            app/build/outputs/apk/release/*.apk
