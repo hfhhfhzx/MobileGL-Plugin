@@ -26,14 +26,14 @@ jobs:
           base64 -d keystore.base64 > keystore
           
       - name: Grant execute permission for gradlew
-        run: chmod +x ./gradlew --refresh-dependencies
+        run: chmod +x ./gradlew
       
       - name: Build Release APK
         env:
           SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
           SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
-        run: ./gradlew assembleRelease
+        run: ./gradlew assembleRelease --refresh-dependencies
       
       - name: Upload APK
         uses: actions/upload-artifact@v4
