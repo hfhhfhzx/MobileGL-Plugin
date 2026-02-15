@@ -29,6 +29,12 @@ android {
         }
     }
 
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
+    
     buildFeatures {
         resValues = true
     }
