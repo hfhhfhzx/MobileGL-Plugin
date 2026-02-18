@@ -30,10 +30,6 @@ jobs:
           cache-read-only: false
       
       - name: Set up Signing Key
-        env:
-          SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
-          SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
-          SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
         run: |
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > keystore
           
@@ -41,6 +37,10 @@ jobs:
         run: chmod +x ./gradlew
       
       - name: Build Release APK
+        env:
+          SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
+          SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
         run: ./gradlew assembleRelease
       
       - name: Upload APK
