@@ -1,6 +1,6 @@
 ## MobileGL-Plugin
 
-FCL Renderer Plugin(Unofficial build)
+FCL Renderer Plugin
 
 ## Thanks
 
