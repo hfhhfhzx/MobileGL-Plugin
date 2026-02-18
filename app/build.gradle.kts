@@ -41,7 +41,7 @@ android {
     
     signingConfigs {
         if (IsSigning) {
-            register("releaseCustom") {
+            create("release") {
                 this.storeFile = rootProject.file(storeFile)
                 this.storePassword = storePassword
                 this.keyAlias = keyAlias
