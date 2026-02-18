@@ -24,33 +24,32 @@ jobs:
         with:
           fetch-depth: 0
           
-      - name: Setup Gradle
+      - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v5
         with:
           cache-read-only: false
       
-      - name: Decode Keystore
-        run: |
-          echo "${{ secrets.KEYSTORE_BASE64 }}" > keystore.base64
-          base64 -d keystore.base64 > keystore
-          
-      - name: Grant execute permission for gradlew
-        run: chmod +x ./gradlew
-      
-      - name: Build Release APK
+      - name: Set up Signing Key
         env:
           SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
           SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > keystore
+          
+      - name: Grant Execute Permission for gradlew
+        run: chmod +x ./gradlew
+      
+      - name: Build Release APK
         run: ./gradlew assembleRelease
       
       - name: Upload APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: app-release
           path: app/build/outputs/apk/release/*.apk
           
-      - name: Delete old latest release and tag
+      - name: Delete Old latest Release and Tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -68,5 +67,4 @@ jobs:
             - 这是最新构建的 MobileGL 插件，将在下一次 Github Actions 运行时被替换
 
             - This is the newly built MobileGL plugin which will be replaced during the next Github Actions run
-          files: |
-            app/build/outputs/apk/release/*.apk
+          files: app/build/outputs/apk/release/*.apk
