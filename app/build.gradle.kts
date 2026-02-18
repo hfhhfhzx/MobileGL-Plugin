@@ -41,22 +41,19 @@ android {
     
     signingConfigs {
         if (IsSigning) {
-            try {
-                  create("release") {
-                  this.storeFile = rootProject.file(storeFile)
-                  this.storePassword = storePassword
-                  this.keyAlias = keyAlias
-                  this.keyPassword = keyPassword
-                  enableV1Signing = false
-                  enableV2Signing = true
-                  enableV3Signing = false
-                  enableV4Signing = false
-                }
-            } catch (e: Exception) {
-            println("Warning: Could not load keystore.properties file: ${e.message}")
+            register("release") {
+                this.storeFile = rootProject.file(storeFile)
+                this.storePassword = storePassword
+                this.keyAlias = keyAlias
+                this.keyPassword = keyPassword
+                enableV1Signing = false
+                enableV2Signing = true
+                enableV3Signing = false
+                enableV4Signing = false
+            }
         }
     }
-}
+
     packaging {
         jniLibs {
             useLegacyPackaging = true
