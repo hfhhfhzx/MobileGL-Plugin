@@ -40,8 +40,11 @@ android {
     }
     
     signingConfigs {
+        
+        create("debug")
+        
         if (IsSigning) {
-            register("release") {
+            register("releaseCustom") {
                 this.storeFile = rootProject.file(storeFile)
                 this.storePassword = storePassword
                 this.keyAlias = keyAlias
@@ -65,8 +68,14 @@ android {
     }
     
     buildTypes {
-        release {
-            signingConfig = signingConfigs.getByName("release")
+        getByName("release") {
+            signingConfig = if (IsSigning) {
+                println("Applying custom signing to release build")
+                signingConfigs.getByName("releaseCustom")
+            } else {
+                println("No custom signing, using debug keystore for release")
+                signingConfigs.getByName("debug")
+            }
             isMinifyEnabled = false
         }
         configureEach {
