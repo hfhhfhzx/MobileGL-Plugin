@@ -5,12 +5,29 @@ plugins {
 android {
     namespace = "com.mio.plugin.renderer"
     compileSdk = 36
+    
+    val properties = Properties()
+    val keystorePropertiesFile = rootProject.file("keystore.properties")
+    if (keystorePropertiesFile.exists()) {
+        try {
+            properties.load(keystorePropertiesFile.inputStream())
+        } catch (e: Exception) {
+            println("Warning: Could not load keystore.properties file: ${e.message}")
+        }
+    }
+    val storeFile = properties.getProperty("storeFile") ?: System.getenv("KEYSTORE_FILE")
+    val storePassword =
+        properties.getProperty("storePassword") ?: System.getenv("KEYSTORE_PASSWORD")
+    val keyAlias = properties.getProperty("keyAlias") ?: System.getenv("KEY_ALIAS")
+    val keyPassword = properties.getProperty("keyPassword") ?: System.getenv("KEY_PASSWORD")
+    val IsSigning =
+        storeFile != null && storePassword != null && keyAlias != null && keyPassword != null
 
     defaultConfig {
         applicationId = "com.fcl.plugin"
         minSdk = 26
         targetSdk = 36
-        versionCode = 959
+        versionCode = 967
         versionName = "1.0.0"
     }
     
@@ -21,11 +38,17 @@ android {
     }
     
     signingConfigs {
-        create("release") {
-            storeFile = file("../keystore")
-            storePassword = System.getenv("SIGNING_STORE_PASSWORD") ?: project.findProperty("SIGNING_STORE_PASSWORD") as String?
-            keyAlias = System.getenv("SIGNING_KEY_ALIAS") ?: project.findProperty("SIGNING_KEY_ALIAS") as String?
-            keyPassword = System.getenv("SIGNING_KEY_PASSWORD") ?: project.findProperty("SIGNING_KEY_PASSWORD") as String?
+        if (hasCustomSigning) {
+            register("releaseCustom") {
+                this.storeFile = rootProject.file(storeFile)
+                this.storePassword = storePassword
+                this.keyAlias = keyAlias
+                this.keyPassword = keyPassword
+                enableV1Signing = false
+                enableV2Signing = true
+                enableV3Signing = false
+                enableV4Signing = false
+            }
         }
     }
 

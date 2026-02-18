@@ -30,17 +30,24 @@ jobs:
           cache-read-only: false
       
       - name: Set up Signing Key
+        env:
+          SIGNING_STORE_PASSWORD: 
+          SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
         run: |
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > keystore
+          mkdir keystore
+          cd keystore
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > sign
+          echo "storeFile=keystore/sign" > keystore.properties
+          echo "keyAlias=${SIGNING_KEY_ALIAS}" >> keystore.properties
+          echo "keyPassword=${SIGNING_KEY_PASSWORD}" >> keystore.properties
+          echo "storePassword=${SIGNING_STORE_PASSWORD}" >> keystore.properties
+          cd ..
           
       - name: Grant Execute Permission for gradlew
         run: chmod +x ./gradlew
       
-      - name: Build Release APK
-        env:
-          SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
-          SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
-          SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+      - name: Build with Gradle
         run: ./gradlew assembleRelease
       
       - name: Upload APK
@@ -57,6 +64,10 @@ jobs:
           gh release delete "$LATEST_TAG" --yes || echo "No previous latest release found to delete."
           git push origin --delete "$LATEST_TAG" || echo "No previous latest tag found to delete."
           
+      - name: Get VersionCode
+        id: vc
+        run: echo "VersionCode=$(grep versionCode app/build.gradle.kts | cut -d '=' -f 2 | tr -d ' ')" >> $GITHUB_OUTPUT
+      
       - name: Create latest Release
         uses: softprops/action-gh-release@v2
         with:
@@ -65,6 +76,10 @@ jobs:
           target_commitish: ${{ github.sha }}
           body: |
             - 这是最新构建的 MobileGL 插件，将在下一次 Github Actions 运行时被替换
+            
+            - 版本号：${{ steps.vc.outputs.VersionCode }}
 
             - This is the newly built MobileGL plugin which will be replaced during the next Github Actions run
+            
+            - VersionCode： ${{ steps.vc.outputs.VersionCode }}
           files: app/build/outputs/apk/release/*.apk
