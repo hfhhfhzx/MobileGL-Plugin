@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
 }
@@ -38,7 +40,7 @@ android {
     }
     
     signingConfigs {
-        if (hasCustomSigning) {
+        if (IsSigning) {
             register("releaseCustom") {
                 this.storeFile = rootProject.file(storeFile)
                 this.storePassword = storePassword
