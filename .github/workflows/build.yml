@@ -36,18 +36,21 @@ jobs:
       - name: Grant Execute Permission for gradlew
         run: chmod +x ./gradlew
       
-      - name: Build Release APK
+      - name: Build with Gradle and Find APK
+        id: build
         env:
           SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
           SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
-        run: ./gradlew assembleRelease
+        run: |
+          ./gradlew assembleOpengles assembleVulkan
+          echo "APK=$(find ./app/build/outputs/apk -name "*.apk")" >> $GITHUB_OUTPUT
       
       - name: Upload APK
         uses: actions/upload-artifact@v6
         with:
-          name: app-release
-          path: app/build/outputs/apk/release/*.apk
+          name: MobileGL
+          path: ${{ steps.build.outputs.APK }}
           
       - name: Delete Old latest Release and Tag
         env:
