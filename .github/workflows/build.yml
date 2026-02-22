@@ -43,7 +43,7 @@ jobs:
           SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
         run: |
-          ./gradlew assembleOpengles assembleVulkan
+          ./gradlew assembleRelease
           echo "APK=$(find ./app/build/outputs/apk -name "*.apk")" >> $GITHUB_OUTPUT
       
       - name: Upload APK
