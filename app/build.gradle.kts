@@ -41,57 +41,10 @@ android {
     
     buildTypes {
         release {
+            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
         }
-        vulkan {
-            manifestPlaceholders["boatEnv"] = mutableMapOf<String,String>().apply {
-                put("MOBILEGL_BACKEND_TYPE", "DirectVulkan")
-            }.run {
-                var env = ""
-                forEach { (key, value) ->
-                    env += "$key=$value:"
-                }
-                env.dropLast(1)
-            }
-            
-            manifestPlaceholders["pojavEnv"] = mutableMapOf<String,String>().apply {
-                put("MOBILEGL_BACKEND_TYPE", "DirectVulkan")
-                put("POJAVEXEC_EGL", "libMobileGL.so")
-				put("LIBGL_EGL", "libMobileGL.so")
-            }.run {
-                var env = ""
-                forEach { (key, value) ->
-                    env += "$key=$value:"
-                }
-                env.dropLast(1)
-            }
-        }
-        opengles {
-            manifestPlaceholders["boatEnv"] = mutableMapOf<String,String>().apply {
-                put("LIBGL_ES", "3")
-            }.run {
-                var env = ""
-                forEach { (key, value) ->
-                    env += "$key=$value:"
-                }
-                env.dropLast(1)
-            }
-            
-            manifestPlaceholders["pojavEnv"] = mutableMapOf<String,String>().apply {
-                put("LIBGL_ES", "3")
-                put("POJAV_RENDERER", "opengles3_mgl")
-				put("POJAVEXEC_EGL", "libMobileGL.so")
-				put("LIBGL_EGL", "libMobileGL.so")
-            }.run {
-                var env = ""
-                forEach { (key, value) ->
-                    env += "$key=$value:"
-                }
-                env.dropLast(1)
-            }
-        }
         configureEach {
-            signingConfig = signingConfigs.getByName("release")
             //应用名
             //app name
             resValue("string","app_name","MobileGL")
@@ -112,7 +65,7 @@ android {
             //DLOPEN=libxxx.so used to load external library
             //如果有多个库,可以使用","隔开,例如  DLOPEN=libxxx.so,libyyy.so
             //If there are multiple libraries, you can use "," to separate them, for example  DLOPEN=libxxx.so,libyyy.so
-            /* manifestPlaceholders["boatEnv"] = mutableMapOf<String,String>().apply {
+            manifestPlaceholders["boatEnv"] = mutableMapOf<String,String>().apply {
                 put("LIBGL_ES", "3")
             }.run {
                 var env = ""
@@ -120,9 +73,9 @@ android {
                     env += "$key=$value:"
                 }
                 env.dropLast(1)
-            } */
+            }
 
-            /* manifestPlaceholders["pojavEnv"] = mutableMapOf<String,String>().apply {
+            manifestPlaceholders["pojavEnv"] = mutableMapOf<String,String>().apply {
                 put("LIBGL_ES", "3")
                 put("POJAV_RENDERER", "opengles3_mgl")
 				put("POJAVEXEC_EGL", "libMobileGL.so")
@@ -133,7 +86,7 @@ android {
                     env += "$key=$value:"
                 }
                 env.dropLast(1)
-            }*/
+            }
 
             //最小支持的MC版本
             //The minimum supported MC version
