@@ -10,7 +10,7 @@ android {
         applicationId = "com.fcl.plugin"
         minSdk = 26
         targetSdk = 36
-        versionCode = 959
+        versionCode = 1123
         versionName = "1.0.0"
     }
     
