@@ -2,13 +2,17 @@
 -classobfuscationdictionary dictionary.txt
 -packageobfuscationdictionary dictionary.txt
 
--keep,allowobfuscation class !com.fcl.plugin.mobilegl.**,com.mio.plugin.renderer.** {
+-keep,allowobfuscation class com.mio.plugin.renderer.** {
     *;
 }
 
 -keeppackagenames com.fcl.plugin.mobilegl
 
--keep public class com.mio.plugin.renderer.MainActivity
+-keep class com.mio.plugin.renderer.MainActivity
+
+-keepclassmembers class com.mio.plugin.renderer.MainActivity {
+    !native <methods>;
+}
 
 -keep public class * extends android.app.Activity
 -keep public class * extends android.app.Service
