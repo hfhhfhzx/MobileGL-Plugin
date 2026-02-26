@@ -2,6 +2,10 @@
 -classobfuscationdictionary dictionary.txt
 -packageobfuscationdictionary dictionary.txt
 
+-keep,allowobfuscation class !com.fcl.plugin.mobilegl.**,com.mio.plugin.renderer.** {
+    *;
+}
+
 -keeppackagenames com.fcl.plugin.mobilegl
 
 -keep public class com.mio.plugin.renderer.MainActivity
