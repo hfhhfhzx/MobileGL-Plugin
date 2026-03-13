@@ -2,5 +2,3 @@
     *;
 }
 
--keep class com.mio.plugin.renderer.MainActivity
--keeppackagenames com.fcl.plugin.mobilegl
