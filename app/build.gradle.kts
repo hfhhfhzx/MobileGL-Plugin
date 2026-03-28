@@ -2,15 +2,30 @@ plugins {
     alias(libs.plugins.android.application)
 }
 
+val gitCommitCount: Int by lazy { runGitCommand("rev-list", "--count", "HEAD")?.toIntOrNull() ?: 0 }
+
+val gitVersionCode: Int by lazy { 1198 + gitCommitCount }
+
+fun runGitCommand(vararg args: String): String? = runCatching {
+    ProcessBuilder(listOf("git") + args)
+        .redirectErrorStream(true)
+        .start()
+        .let { process ->
+            val output = process.inputStream.bufferedReader().readText().trim()
+            if (process.waitFor() == 0 && output.isNotBlank()) output else null
+        }
+}.getOrNull()
+
 android {
     namespace = "com.mio.plugin.renderer"
-    compileSdk = 36
+    compileSdk = 37
+    buildToolsVersion = "37.0.0"
 
     defaultConfig {
         applicationId = "com.fcl.plugin"
         minSdk = 26
-        targetSdk = 36
-        versionCode = 1198
+        targetSdk = 37
+        versionCode = gitVersionCode
         versionName = "1.0.0"
     }
     
