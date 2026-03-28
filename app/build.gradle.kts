@@ -19,6 +19,7 @@ fun runGitCommand(vararg args: String): String? = runCatching {
 android {
     namespace = "com.mio.plugin.renderer"
     compileSdk = 37
+    compileSdkMinor = 0
     buildToolsVersion = "37.0.0"
 
     defaultConfig {
