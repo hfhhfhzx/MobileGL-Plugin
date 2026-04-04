@@ -9,6 +9,8 @@ val gitCommitCount: Int by lazy { runGitCommand("rev-list", "--count", "HEAD")?.
 
 val gitVersionCode: Int by lazy { 1198 + gitCommitCount }
 
+val gitTag: Int by lazy { runGitCommand("tag", "--list", "v*")?.toIntOrNull() ?: 0 }
+
 val properties: Properties? = loadPropertiesFromFile("signing.properties")
     fun getString(propertyName: String, environmentName: String, prompt: String): String =
         properties?.getProperty(propertyName)
@@ -84,6 +86,7 @@ android {
         release {
             configSigning()
             isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
         
@@ -136,8 +139,8 @@ android {
                 env.dropLast(1)
             }
 
-             // 为空则不限制 
-             // No restriction if empty
+            // 为空则不限制 
+            // No restriction if empty
             // 最小支持的MC版本
             // The minimum supported MC version
             manifestPlaceholders["minMCVer"] = "1.17"
