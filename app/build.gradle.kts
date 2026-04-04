@@ -9,7 +9,7 @@ val gitCommitCount: Int by lazy { runGitCommand("rev-list", "--count", "HEAD")?.
 
 val gitVersionCode: Int by lazy { 1198 + gitCommitCount }
 
-val gitTag: String by lazy { runGitCommand("describe", "--tags", "--match", "v*", "--abbrev=0")?.toIntOrNull() ?: 0 }
+val gitTag: String by lazy { runGitCommand("describe", "--tags", "--match", "v*", "--abbrev=0") ?: "v1.0.0" }
 
 val properties: Properties? = loadPropertiesFromFile("signing.properties")
     fun getString(propertyName: String, environmentName: String, prompt: String): String =
