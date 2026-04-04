@@ -9,7 +9,7 @@ val gitCommitCount: Int by lazy { runGitCommand("rev-list", "--count", "HEAD")?.
 
 val gitVersionCode: Int by lazy { 1198 + gitCommitCount }
 
-val gitTag: Int by lazy { runGitCommand("tag", "--list", "v*")?.toIntOrNull() ?: 0 }
+val gitTag: String by lazy { runGitCommand("tag", "--list", "v*", "--sort=-v:refname")?.toIntOrNull() ?: 0 }
 
 val properties: Properties? = loadPropertiesFromFile("signing.properties")
     fun getString(propertyName: String, environmentName: String, prompt: String): String =
@@ -43,7 +43,7 @@ android {
         minSdk = 26
         targetSdk = 37
         versionCode = gitVersionCode
-        versionName = "1.0.0"
+        versionName = gitTag
     }
     
     kotlin {
