@@ -17,6 +17,14 @@ on:
         description: "是否发布一个Release？Should a release be issued?"
         required: true
         default: false
+  pull_request:
+    paths:
+      - 'app/**'
+      - 'build.gradle.kts'
+      - 'settings.gradle.kts'
+      - 'gradle.properties'
+      - 'gradle/**'
+      - '.github/workflows/build.yml'
 
 jobs:
   build:
@@ -37,6 +45,7 @@ jobs:
           cache-read-only: false
       
       - name: Set up Signing Key
+        if: ${{ github.event_name != 'pull_request' }}
         run: |
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > keystore
           echo "storeFile=../keystore" > signing.properties
@@ -60,7 +69,7 @@ jobs:
           archive: false
           
       - name: Delete Old nightly Release and Tag
-        if: ${{ github.event.inputs.Release == 'true' || !contains(github.event.head_commit.message, '[skip delete]') }}
+        if: ${{ ( github.event.inputs.Release == 'true' || !contains(github.event.head_commit.message, '[skip delete]') ) && github.event_name != 'pull_request' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -69,7 +78,7 @@ jobs:
           git push origin --delete "$LATEST_TAG" || echo "No previous nightly tag found to delete."
           
       - name: Create latest Release
-        if: ${{ github.event.inputs.Release == 'true' || !contains(github.event.head_commit.message, '[skip release]') }}
+        if: ${{ ( github.event.inputs.Release == 'true' || !contains(github.event.head_commit.message, '[skip release]') ) && github.event_name != 'pull_request' }}
         uses: softprops/action-gh-release@v2
         with:
           name: "Nightly Build"
