@@ -7,7 +7,7 @@ plugins {
 
 val gitCommitCount: Int by lazy { runGitCommand("rev-list", "--count", "HEAD")?.toIntOrNull() ?: 0 }
 
-val gitVersionCode: Int by lazy { 1198 + gitCommitCount }
+val gitVersionCode: Int by lazy { 1231 + gitCommitCount }
 
 val gitTag: String by lazy { runGitCommand("describe", "--tags", "--match", "v*", "--abbrev=0") ?: "v1.0.0" }
 
