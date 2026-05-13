@@ -7,9 +7,12 @@ plugins {
 
 val gitCommitCount: Int by lazy { runGitCommand("rev-list", "--count", "HEAD")?.toIntOrNull() ?: 0 }
 
-val gitVersionCode: Int by lazy { 1231 + gitCommitCount }
+val gitHash: String by lazy { runGitCommand("rev-parse", "--short", "HEAD") ?: "unknown" }
 
 val gitTag: String by lazy { runGitCommand("describe", "--tags", "--match", "v*", "--abbrev=0") ?: "v1.0.0" }
+
+val gitVersionCode: Int by lazy { 1231 + gitCommitCount }
+
 
 val properties: Properties? = loadPropertiesFromFile("signing.properties")
     fun getString(propertyName: String, environmentName: String, prompt: String): String =
@@ -153,6 +156,23 @@ android {
             // 最大支持的MC版本
             // The maximum supported MC version
             manifestPlaceholders["maxMCVer"] = ""
+        }
+    }
+    afterEvaluate {
+        android.applicationVariants.all { variant ->
+            variant.outputs.all { output ->
+                // 判断输出类型，避免因类型转换崩溃
+                when (output) {
+                    is com.android.build.gradle.internal.api.ApkVariantOutputImpl -> {
+                        // 普通 APK 命名
+                        output.outputFileName = "MobileGL-${variant.versionName}-${variant.versionCode}-${gitHash}-${variant.name}.apk"
+                    }
+                    is com.android.build.gradle.internal.api.AabVariantOutputImpl -> {
+                        // AAB 命名
+                        output.outputFileName = "MobileGL-${variant.versionName}-${variant.versionCode}-${gitHash}-${variant.name}.aab"
+                    }
+                }
+            }
         }
     }
 }
