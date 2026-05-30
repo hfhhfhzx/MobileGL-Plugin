@@ -1,3 +1,6 @@
+## 停更通知
+上游已提供 FCL Renderer Plugin，故我决定归档此项目
+
 ## MobileGL-Plugin
 FCL Renderer Plugin
 
