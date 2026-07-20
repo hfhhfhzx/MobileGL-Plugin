@@ -69,7 +69,7 @@ jobs:
       - name: Build with Gradle and Find APK
         id: build
         run: |
-          ./gradlew assembleRelease
+          ./gradlew assembleRelease --info --stacktrace
           echo "APK=$(find ./app/build/outputs/apk -name "*.apk")" >> $GITHUB_OUTPUT
       
       - name: Upload APK
