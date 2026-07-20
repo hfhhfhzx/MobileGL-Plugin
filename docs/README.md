@@ -1,12 +1,11 @@
-## 停更通知
-上游已提供 FCL Renderer Plugin，故我决定归档此项目
-
 ## MobileGL-Plugin
-FCL Renderer Plugin
+FCL Renderer Plugin for MobileGL
 
 ## Credits
-This project uses some or all of the code or binary files from the following projects
+感谢以下项目，没有它们，就没有本项目
 
-[MobileGL-Dev/MobileGL](https://github.com/MobileGL-Dev/MobileGL) : libMobileGL
+[MobileGL-Dev/MobileGL](https://github.com/MobileGL-Dev/MobileGL) MobileGL，此项目也提供了类似功能
 
-[ShirosakiMio/FCLRendererPlugin](https://github.com/ShirosakiMio/FCLRendererPlugin) : Template of FCLRendererPlugin
+[ShirosakiMio/FCLRendererPlugin](https://github.com/ShirosakiMio/FCLRendererPlugin) FCLRendererPlugin 模板
+
+

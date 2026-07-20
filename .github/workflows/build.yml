@@ -11,12 +11,6 @@ on:
       - 'gradle/**'
       - '.github/workflows/build.yml'
   workflow_dispatch:
-    inputs:
-      Release:
-        type: boolean
-        description: "是否发布一个Release？Should a release be issued?"
-        required: true
-        default: false
   pull_request:
     paths:
       - 'app/**'
@@ -35,7 +29,7 @@ jobs:
     
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
           
@@ -69,24 +63,3 @@ jobs:
         with:
           path: ${{ steps.build.outputs.APK }}
           archive: false
-          
-      - name: Delete Old nightly Release and Tag
-        if: ${{ ( github.event.inputs.Release == 'true' || !contains(github.event.head_commit.message, '[skip delete]') ) && github.event_name != 'pull_request' }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          LATEST_TAG=$(git tag --list nightly)
-          gh release delete "$LATEST_TAG" --yes || echo "No previous nightly release found to delete."
-          git push origin --delete "$LATEST_TAG" || echo "No previous nightly tag found to delete."
-          
-      - name: Create latest Release
-        if: ${{ ( github.event.inputs.Release == 'true' || !contains(github.event.head_commit.message, '[skip release]') ) && github.event_name != 'pull_request' }}
-        uses: softprops/action-gh-release@v3
-        with:
-          name: "Nightly Build"
-          tag_name: "nightly"
-          target_commitish: ${{ github.sha }}
-          body: |
-            Nightly Build
-          files: ${{ steps.build.outputs.APK }}
-          prerelease: true
