@@ -80,7 +80,8 @@ jobs:
           path: ${{ steps.build.outputs.APK }}
           archive: false
           
-      - name: Upload APK
+      - name: Upload Build Log
+        if: failure()
         uses: actions/upload-artifact@v7
         with:
           path: build.log
