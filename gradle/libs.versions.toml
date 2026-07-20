@@ -1,7 +1,10 @@
 [versions]
 agp = "9.3.0"
 kotlin = "2.4.10"
+cmaker = "1.4"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+lsplugin-cmaker = { id = "org.lsposed.lsplugin.cmaker", version = "cmaker" }
