@@ -26,6 +26,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    env:
+        BUILD_ROOT: ${{github.workspace}}
     
     steps:
       - name: Checkout
