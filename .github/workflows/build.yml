@@ -58,6 +58,19 @@ jobs:
           echo "keyPassword=${{ secrets.SIGNING_KEY_PASSWORD }}" >> signing.properties
           echo "storePassword=${{ secrets.SIGNING_STORE_PASSWORD }}" >> signing.properties
           
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v4
+        with:
+          accept-android-sdk-licenses: false
+
+      - name: Accept Android SDK licenses
+        run: yes | sdkmanager --licenses >/dev/null
+
+      - name: Install Android NDK
+        run: |
+          sdkmanager "ndk;27.3.13750724"
+          echo "ndk.dir=$ANDROID_HOME/ndk/27.3.13750724" >> local.properties
+      
       - name: Grant Execute Permission for gradlew
         run: chmod +x ./gradlew
       
@@ -84,5 +97,6 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v7
         with:
+          name: build-log
           path: build.log
           archive: true
