@@ -69,7 +69,9 @@ jobs:
       - name: Build with Gradle and Find APK
         id: build
         run: |
-          ./gradlew assembleReleas --stacktrace
+          set -e
+          set -o pipefail
+          ./gradlew assembleRelease --stacktrace 2>&1 | tee build.log
           echo "APK=$(find ./app/build/outputs/apk -name "*.apk")" >> $GITHUB_OUTPUT
       
       - name: Upload APK
@@ -77,3 +79,9 @@ jobs:
         with:
           path: ${{ steps.build.outputs.APK }}
           archive: false
+          
+      - name: Upload APK
+        uses: actions/upload-artifact@v7
+        with:
+          path: build.log
+          archive: true

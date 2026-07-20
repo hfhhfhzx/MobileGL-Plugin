@@ -3,6 +3,11 @@ plugins {
     alias(libs.plugins.lsplugin.cmaker)
 }
 
+val mobileGlLogActiveLevel: String by lazy {
+    (rootProject.findProperty("mobilegl.logLevel") as? String)
+        ?: (System.getenv("MOBILEGL_LOG_ACTIVE_LEVEL") ?: "MOBILEGL_LOG_LEVEL_INFO")
+}
+
 cmaker {
     default {
         // 指定编译的目标 CPU 架构
@@ -17,6 +22,12 @@ android {
 
     defaultConfig {
         minSdk = 21
+        
+        externalNativeBuild {
+        cmake {
+            arguments += "-DMOBILEGL_LOG_ACTIVE_LEVEL=${mobileGlLogActiveLevel}"
+        }
+    }
     }
 
     buildTypes {
