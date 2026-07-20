@@ -84,7 +84,7 @@ jobs:
         run: |
           set -e
           set -o pipefail
-          ./gradlew assembleRelease --stacktrace 2>&1 | tee build.log
+          ./gradlew assembleRelease --stacktrace -Pmobilegl.logLevel=MOBILEGL_LOG_LEVEL_INFO --parallel --max-workers "$(nproc)" 2>&1 | tee build.log
           echo "APK=$(find ./app/build/outputs/apk -name "*.apk")" >> $GITHUB_OUTPUT
       
       - name: Upload APK
